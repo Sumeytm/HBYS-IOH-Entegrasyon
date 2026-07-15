@@ -1,0 +1,14 @@
+{
+  "orders": [],
+  "results": [
+    {
+      "id": 1,
+      "patientId": "P001",
+      "testCode": "CBC",
+      "value": "Normal",
+      "unit": "",
+      "status": "completed",
+      "resultDate": "2026-07-15T11:00:00"
+    }
+  ]
+}

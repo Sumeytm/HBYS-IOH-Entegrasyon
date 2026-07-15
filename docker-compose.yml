@@ -1,0 +1,62 @@
+services:
+  db:
+    image: postgres:14
+    container_name: mirth_postgres
+    environment:
+      POSTGRES_USER: mirth
+      POSTGRES_PASSWORD: mirth123
+      POSTGRES_DB: mirthdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - mirth_network
+
+  mirth:
+    image: nextgenhealthcare/connect:4.4.1
+    container_name: mirth_connect
+    environment:
+      - DATABASE=postgres
+      - DATABASE_URL=jdbc:postgresql://db:5432/mirthdb
+      - DATABASE_USERNAME=mirth
+      - DATABASE_PASSWORD=mirth123
+      - KEYSTORE_STOREPASS=changeme
+      - KEYSTORE_KEYPASS=changeme
+    ports:
+      - "8080:8080"
+      - "8443:8443"
+      - "8001:8001"
+    volumes:
+      - ./mirth/appdata:/opt/connect/appdata
+    depends_on:
+      - db
+    networks:
+      - mirth_network
+
+  hbys-mock:
+    image: clue/json-server
+    container_name: hbys_mock
+    volumes:
+      - ./mock/hbys-db.json:/data/db.json
+    ports:
+      - "9001:80"
+    networks:
+      - mirth_network
+
+  ioh-mock:
+    image: clue/json-server
+    container_name: ioh_mock
+    volumes:
+      - ./mock/ioh-db.json:/data/db.json
+    ports:
+      - "9000:80"
+    networks:
+      - mirth_network
+
+networks:
+  mirth_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
