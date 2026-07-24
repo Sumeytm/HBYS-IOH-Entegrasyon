@@ -1,24 +1,24 @@
 \# HBYS – IOH Entegrasyon Platformu
 
-
-
 Mirth Connect tabanlı, HBYS ile IOH arasında iki yönlü REST entegrasyonu sağlayan staj projesi.
 
 
 
 \## Mimari
 
+Entegrasyon, biri order (istek) diğeri result (sonuç) yönünde olmak üzere iki ayrı kanal üzerinden çift yönlü çalışır:
 
 
-HBYS REST API → Mirth Connect → IOH Core API → PostgreSQL
+
+\- \*\*HBYS\_Order\_Channel\*\*: HBYS REST API → Mirth Connect → IOH Core API
+
+\- \*\*HBYS\_Result\_Channel\*\*: IOH Core API → Mirth Connect → HBYS REST API
 
 
 
 \## Teknolojiler
 
-
-
-\- Mirth Connect 4.4.1
+\- Mirth Connect 4.5.2
 
 \- PostgreSQL 14
 
@@ -29,8 +29,6 @@ HBYS REST API → Mirth Connect → IOH Core API → PostgreSQL
 
 
 \## Kurulum
-
-
 
 1\. Docker Desktop'ı başlatın
 
@@ -50,8 +48,6 @@ HBYS REST API → Mirth Connect → IOH Core API → PostgreSQL
 
 \## Servisler
 
-
-
 | Servis | Port |
 
 |---|---|
@@ -68,9 +64,19 @@ HBYS REST API → Mirth Connect → IOH Core API → PostgreSQL
 
 
 
+\## Kanallar
+
+| Kanal | Yön | Açıklama |
+
+|---|---|---|
+
+| HBYS\_Order\_Channel | HBYS → IOH | HBYS'den gelen order isteğini IOH'ye iletir |
+
+| HBYS\_Result\_Channel | IOH → HBYS | IOH'den gelen sonucu HBYS formatına dönüştürüp HBYS'ye iletir |
+
+
+
 \## Sprint Planı
-
-
 
 | Hafta | Hedef | Durum |
 
@@ -78,11 +84,9 @@ HBYS REST API → Mirth Connect → IOH Core API → PostgreSQL
 
 | 1 | Kurulum, ilk channel | Tamamlandı |
 
-| 2 | Order akışı (HBYS → IOH) | Devam ediyor |
+| 2 | Order akışı (HBYS → IOH) ve Result akışı (IOH → HBYS) | Tamamlandı |
 
-| 3 | Result akışı (IOH → HBYS) | Bekliyor |
+| 3 | Retry, loglama, hata yönetimi | Bekliyor |
 
-| 4 | Retry, loglama, hata yönetimi | Bekliyor |
-
-| 5 | Docker, test, dokümantasyon | Bekliyor |
+| 4 | Docker, test, dokümantasyon | Bekliyor |
 
