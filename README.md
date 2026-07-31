@@ -107,6 +107,7 @@ Her mesajın işlenme süreci, kanal adı ve benzersiz mesaj kimliği (mesajId) 
 \[HBYS\_Result\_Channel] Mesaj basariyla donusturuldu | mesajId=5 | hastaId=P010 | testKodu=GLU | durum=TAMAMLANDI | kaynakSistem=IOH
 
 
+
 Ayrıca her iki kanal da Mirth Connect'in "Development" mesaj saklama modunda çalışacak şekilde yapılandırılmıştır; bu sayede tüm mesajların ham, dönüştürülmüş ve yanıt içerikleri süresiz olarak saklanır ve Mirth Connect Administrator'ın "View Messages" ekranı üzerinden geriye dönük olarak denetlenebilir.
 
 
@@ -121,7 +122,7 @@ Ayrıca her iki kanal da Mirth Connect'in "Development" mesaj saklama modunda ç
 
 | 1 | Kurulum, ilk channel | Tamamlandı |
 
-| 2 | Order akışı (HBYS → IOH) ve Result akışı (IOH → HBYS) | Tamamlandı 
+| 2 | Order akışı (HBYS → IOH) ve Result akışı (IOH → HBYS) | Tamamlandı|
 
 | 3 | Retry, loglama, hata yönetimi | Tamamlandı |
 
