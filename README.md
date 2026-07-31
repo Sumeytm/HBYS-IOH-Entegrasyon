@@ -1,10 +1,14 @@
 \# HBYS – IOH Entegrasyon Platformu
 
+
+
 Mirth Connect tabanlı, HBYS ile IOH arasında iki yönlü REST entegrasyonu sağlayan staj projesi.
 
 
 
 \## Mimari
+
+
 
 Entegrasyon, biri order (istek) diğeri result (sonuç) yönünde olmak üzere iki ayrı kanal üzerinden çift yönlü çalışır:
 
@@ -18,6 +22,8 @@ Entegrasyon, biri order (istek) diğeri result (sonuç) yönünde olmak üzere i
 
 \## Teknolojiler
 
+
+
 \- Mirth Connect 4.5.2
 
 \- PostgreSQL 14
@@ -29,6 +35,8 @@ Entegrasyon, biri order (istek) diğeri result (sonuç) yönünde olmak üzere i
 
 
 \## Kurulum
+
+
 
 1\. Docker Desktop'ı başlatın
 
@@ -48,6 +56,8 @@ Entegrasyon, biri order (istek) diğeri result (sonuç) yönünde olmak üzere i
 
 \## Servisler
 
+
+
 | Servis | Port |
 
 |---|---|
@@ -66,6 +76,8 @@ Entegrasyon, biri order (istek) diğeri result (sonuç) yönünde olmak üzere i
 
 \## Kanallar
 
+
+
 | Kanal | Yön | Açıklama |
 
 |---|---|---|
@@ -76,7 +88,32 @@ Entegrasyon, biri order (istek) diğeri result (sonuç) yönünde olmak üzere i
 
 
 
+\## Hata Yönetimi ve Loglama
+
+
+
+Kanallar, geçici hataların (bağlantı kopması, hedef servisin geçici olarak erişilemez olması gibi) etkisini azaltmak için retry mekanizmasıyla yapılandırılmıştır: her Destination bağlayıcısı başarısız bir gönderimi 5 saniye aralıklarla en fazla 3 kez tekrar dener. Veri doğrulama hataları (zorunlu alanların eksik olması gibi) ise tekrar denenmeden doğrudan hatalı (Errored) olarak işaretlenir, çünkü bu tür hatalar tekrar denendiğinde de aynı sonucu verir.
+
+
+
+Her mesajın işlenme süreci, kanal adı ve benzersiz mesaj kimliği (mesajId) içeren standart formatlı loglarla izlenebilir hale getirilmiştir. Örnek log çıktıları:
+
+
+
+\[HBYS\_Order\_Channel] Order alindi | mesajId=10 | hastaId=P001 | testKodu=CBC | durum=pending
+
+\[HBYS\_Order\_Channel] Order IOH formatina donusturuldu | mesajId=10 | hastaId=P001 | testKodu=CBC | durum=PENDING
+
+\[HBYS\_Result\_Channel] Mesaj basariyla donusturuldu | mesajId=5 | hastaId=P010 | testKodu=GLU | durum=TAMAMLANDI | kaynakSistem=IOH
+
+
+Ayrıca her iki kanal da Mirth Connect'in "Development" mesaj saklama modunda çalışacak şekilde yapılandırılmıştır; bu sayede tüm mesajların ham, dönüştürülmüş ve yanıt içerikleri süresiz olarak saklanır ve Mirth Connect Administrator'ın "View Messages" ekranı üzerinden geriye dönük olarak denetlenebilir.
+
+
+
 \## Sprint Planı
+
+
 
 | Hafta | Hedef | Durum |
 
@@ -84,9 +121,9 @@ Entegrasyon, biri order (istek) diğeri result (sonuç) yönünde olmak üzere i
 
 | 1 | Kurulum, ilk channel | Tamamlandı |
 
-| 2 | Order akışı (HBYS → IOH) ve Result akışı (IOH → HBYS) | Tamamlandı |
+| 2 | Order akışı (HBYS → IOH) ve Result akışı (IOH → HBYS) | Tamamlandı 
 
-| 3 | Retry, loglama, hata yönetimi | Bekliyor |
+| 3 | Retry, loglama, hata yönetimi | Tamamlandı |
 
 | 4 | Docker, test, dokümantasyon | Bekliyor |
 
