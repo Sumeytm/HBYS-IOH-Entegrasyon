@@ -3,7 +3,7 @@
   <nextMetaDataId>3</nextMetaDataId>
   <name>HBYS_Result_Channel</name>
   <description></description>
-  <revision>35</revision>
+  <revision>4</revision>
   <sourceConnector version="4.5.2">
     <metaDataId>0</metaDataId>
     <name>sourceConnector</name>
@@ -68,7 +68,8 @@ function formatDate(dateString) {
            &apos; &apos; + pad(d.getHours()) + &apos;:&apos; + pad(d.getMinutes()) + &apos;:&apos; + pad(d.getSeconds());
 }
 if (!iohData.patientId || !iohData.testCode) {
-    logger.error(&apos;Zorunlu alan eksik: patientId veya testCode bulunamadi. Ham veri: &apos; + rawMessage);
+    logger.error(&apos;[HBYS_Result_Channel] HATA - Zorunlu alan eksik | mesajId=&apos; + connectorMessage.getMessageId() +
+                 &apos; | hamVeri=&apos; + rawMessage);
     throw new Error(&apos;Mapping hatasi: zorunlu alanlar eksik&apos;);
 }
 var hbysData = {
@@ -82,7 +83,11 @@ var hbysData = {
     kaynakSistem: &apos;IOH&apos;
 };
 channelMap.put(&apos;hbysPayload&apos;, JSON.stringify(hbysData));
-logger.info(&apos;IOH sonucu HBYS formatina donusturuldu: hastaId=&apos; + hbysData.hastaId + &apos;, durum=&apos; + hbysData.islemDurumu);</script>
+logger.info(&apos;[HBYS_Result_Channel] Mesaj basariyla donusturuldu | mesajId=&apos; + connectorMessage.getMessageId() +
+            &apos; | hastaId=&apos; + hbysData.hastaId +
+            &apos; | testKodu=&apos; + hbysData.testKodu +
+            &apos; | durum=&apos; + hbysData.islemDurumu +
+            &apos; | kaynakSistem=&apos; + hbysData.kaynakSistem);</script>
         </com.mirth.connect.plugins.javascriptstep.JavaScriptStep>
       </elements>
       <inboundTemplate encoding="base64"></inboundTemplate>
@@ -117,11 +122,11 @@ logger.info(&apos;IOH sonucu HBYS formatina donusturuldu: hastaId=&apos; + hbysD
       <properties class="com.mirth.connect.connectors.http.HttpDispatcherProperties" version="4.5.2">
         <pluginProperties/>
         <destinationConnectorProperties version="4.5.2">
-          <queueEnabled>false</queueEnabled>
-          <sendFirst>false</sendFirst>
-          <retryIntervalMillis>10000</retryIntervalMillis>
+          <queueEnabled>true</queueEnabled>
+          <sendFirst>true</sendFirst>
+          <retryIntervalMillis>5000</retryIntervalMillis>
           <regenerateTemplate>false</regenerateTemplate>
-          <retryCount>0</retryCount>
+          <retryCount>3</retryCount>
           <rotate>false</rotate>
           <includeFilterTransformer>false</includeFilterTransformer>
           <threadCount>1</threadCount>
@@ -136,7 +141,7 @@ logger.info(&apos;IOH sonucu HBYS formatina donusturuldu: hastaId=&apos; + hbysD
           <queueBufferSize>1000</queueBufferSize>
           <reattachAttachments>true</reattachAttachments>
         </destinationConnectorProperties>
-        <host>http://localhost:9001/results</host>
+        <host>http://hbys-mock/results</host>
         <useProxyServer>false</useProxyServer>
         <proxyAddress></proxyAddress>
         <proxyPort></proxyPort>
@@ -265,7 +270,7 @@ return;</undeployScript>
     <metadata>
       <enabled>true</enabled>
       <lastModified>
-        <time>1784811430842</time>
+        <time>1785491107798</time>
         <timezone>Europe/Istanbul</timezone>
       </lastModified>
       <pruningSettings>
