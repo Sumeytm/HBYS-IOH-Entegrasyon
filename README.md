@@ -167,19 +167,10 @@ Ayrıca her iki kanal da Mirth Connect'in "Development" mesaj saklama modunda ç
 
 
 
-\## Sprint Planı
-
-
-
+## Sprint Planı
 | Hafta | Hedef | Durum |
-
 | --- | --- | --- |
-
 | 1 | Kurulum, ilk channel | Tamamlandı |
-
 | 2 | Order akışı (HBYS → IOH) ve Result akışı (IOH → HBYS) | Tamamlandı |
-
 | 3 | Retry, loglama, hata yönetimi | Tamamlandı |
-
-| 4 | Docker, test, dokümantasyon | Bekliyor |
-
+| 4 | Docker, test, dokümantasyon | Tamamlandı |
