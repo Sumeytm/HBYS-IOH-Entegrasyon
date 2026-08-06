@@ -1,10 +1,3 @@
-Ah, çok haklısın! Kod bloğunun içindeki `alindi` kelimesinde Türkçe karakter (`ı`) kullanmamıştık, terminal veya kod ortamlarında sorun çıkmasın diye öyle yazmıştık. Ama hem daha şık durması hem de Türkçe kurallarına tam uygun olması için onu `alındı` olarak değiştirebiliriz.
-
-
-
-Hemen aşağıdaki düzeltilmiş metni kopyalayıp Notepad'e yapıştırabilirsin. İçindeki `alindi` kelimesini `alındı` olarak düzelttim:
-
-
 
 \# HBYS – IOH Entegrasyon Platformu
 
