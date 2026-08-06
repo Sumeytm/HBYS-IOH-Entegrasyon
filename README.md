@@ -1,3 +1,11 @@
+Ah, çok haklısın! Kod bloğunun içindeki `alindi` kelimesinde Türkçe karakter (`ı`) kullanmamıştık, terminal veya kod ortamlarında sorun çıkmasın diye öyle yazmıştık. Ama hem daha şık durması hem de Türkçe kurallarına tam uygun olması için onu `alındı` olarak değiştirebiliriz.
+
+
+
+Hemen aşağıdaki düzeltilmiş metni kopyalayıp Notepad'e yapıştırabilirsin. İçindeki `alindi` kelimesini `alındı` olarak düzelttim:
+
+
+
 \# HBYS – IOH Entegrasyon Platformu
 
 
@@ -14,9 +22,63 @@ Entegrasyon, biri order (istek) diğeri result (sonuç) yönünde olmak üzere i
 
 
 
-\- \*\*HBYS\_Order\_Channel\*\*: HBYS REST API → Mirth Connect → IOH Core API
+\* \*\*HBYS\_Order\_Channel\*\*: HBYS REST API → Mirth Connect → IOH Core API
 
-\- \*\*HBYS\_Result\_Channel\*\*: IOH Core API → Mirth Connect → HBYS REST API
+\* \*\*HBYS\_Result\_Channel\*\*: IOH Core API → Mirth Connect → HBYS REST API
+
+
+
+\## 🔄 Sistem Mimarisi ve Veri Akışı
+
+
+
+Proje, HBYS (Hastane Bilgi Yönetim Sistemi) ile Mirth Connect arasında HTTP ve IOH formatları üzerinden iki yönlü haberleşme sağlar.
+
+
+
+\[Postman / İstemci]
+
+│ (HTTP POST - JSON)
+
+▼
+
+┌──────────────────────────┐
+
+│   HBYS\_Order\_Channel     │ ──> \[Transformer: JSON -> IOH Dönüşümü \& Validasyon]
+
+└──────────────────────────┘
+
+│
+
+▼ (İşlenmiş Veri / Log)
+
+
+
+\[HBYS\_Result\_Channel]
+
+│ (Sonuç İşleme)
+
+▼
+
+┌──────────────────────────┐
+
+│  HBYS\_Result\_Channel     │ ──> \[Zorunlu Alan \& Format Kontrolleri]
+
+└──────────────────────────┘
+
+
+
+\## 🛠️ Transformer Script İşlevleri
+
+
+
+Kanallar içerisinde gelen verileri işlemek için kullanılan temel mantıklar:
+
+
+
+\* \*\*HBYS\_Order\_Channel (Transformer):\*\* Gelen ham JSON verisini okur, `patientId`, `testCode` gibi kritik alanların varlığını doğrular ve veriyi loglayarak IOH standart formatına dönüştürür.
+
+\* \*\*HBYS\_Result\_Channel (Transformer):\*\* Laboratuvar veya sonuç verilerini karşılar; eksik zorunlu alan olması durumunda `Errored` olarak yakalar ve sistemin çökmesini engeller.
 
 
 
@@ -24,13 +86,13 @@ Entegrasyon, biri order (istek) diğeri result (sonuç) yönünde olmak üzere i
 
 
 
-\- Mirth Connect 4.5.2
+\* Mirth Connect 4.5.2
 
-\- PostgreSQL 14
+\* PostgreSQL 14
 
-\- Docker \& Docker Compose
+\* Docker \& Docker Compose
 
-\- REST / JSON
+\* REST / JSON
 
 
 
@@ -42,13 +104,13 @@ Entegrasyon, biri order (istek) diğeri result (sonuç) yönünde olmak üzere i
 
 2\. Projeyi klonlayın:
 
-&#x20;  git clone https://github.com/Sumeytm/HBYS-IOH-Entegrasyon.git
+git clone \[https://github.com/Sumeytm/HBYS-IOH-Entegrasyon.git](https://github.com/Sumeytm/HBYS-IOH-Entegrasyon.git)
 
-&#x20;  cd HBYS-IOH-Entegrasyon
+cd HBYS-IOH-Entegrasyon
 
 3\. Servisleri başlatın:
 
-&#x20;  docker-compose up -d
+docker-compose up -d
 
 4\. Mirth Connect'e bağlanın: https://localhost:8443
 
@@ -60,7 +122,7 @@ Entegrasyon, biri order (istek) diğeri result (sonuç) yönünde olmak üzere i
 
 | Servis | Port |
 
-|---|---|
+| --- | --- |
 
 | Mirth Connect Admin | 8443 |
 
@@ -80,7 +142,7 @@ Entegrasyon, biri order (istek) diğeri result (sonuç) yönünde olmak üzere i
 
 | Kanal | Yön | Açıklama |
 
-|---|---|---|
+| --- | --- | --- |
 
 | HBYS\_Order\_Channel | HBYS → IOH | HBYS'den gelen order isteğini IOH'ye iletir |
 
@@ -100,11 +162,11 @@ Her mesajın işlenme süreci, kanal adı ve benzersiz mesaj kimliği (mesajId) 
 
 
 
-\[HBYS\_Order\_Channel] Order alindi | mesajId=10 | hastaId=P001 | testKodu=CBC | durum=pending
+\[HBYS\_Order\_Channel] Order alındı | mesajId=10 | hastaId=P001 | testKodu=CBC | durum=pending
 
-\[HBYS\_Order\_Channel] Order IOH formatina donusturuldu | mesajId=10 | hastaId=P001 | testKodu=CBC | durum=PENDING
+\[HBYS\_Order\_Channel] Order IOH formatına dönüştürüldü | mesajId=10 | hastaId=P001 | testKodu=CBC | durum=PENDING
 
-\[HBYS\_Result\_Channel] Mesaj basariyla donusturuldu | mesajId=5 | hastaId=P010 | testKodu=GLU | durum=TAMAMLANDI | kaynakSistem=IOH
+\[HBYS\_Result\_Channel] Mesaj başarıyla dönüştürüldü | mesajId=5 | hastaId=P010 | testKodu=GLU | durum=TAMAMLANDI | kaynakSistem=IOH
 
 
 
@@ -118,7 +180,7 @@ Ayrıca her iki kanal da Mirth Connect'in "Development" mesaj saklama modunda ç
 
 | Hafta | Hedef | Durum |
 
-|---|---|---|
+| --- | --- | --- |
 
 | 1 | Kurulum, ilk channel | Tamamlandı |
 
